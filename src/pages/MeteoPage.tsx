@@ -1,8 +1,9 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {getMeteoWebsites, MeteoWebSite} from "../utils/MeteoWebsites.ts";
 import {MapContainer, Marker, TileLayer, useMapEvents} from "react-leaflet";
 import {LatLng} from "leaflet";
 import {useMarkers} from "../contexts/MarkerContext.tsx";
+import {useCookies} from "react-cookie";
 
 // #------------------#
 // # Map interactions #
@@ -66,10 +67,13 @@ export function MeteoPage() {
     const [isMapOpen, setIsMapOpen] = useState<boolean>(false);
     const [latitude, setLatitude] = useState<string>("");
     const [longitude, setLongitude] = useState<string>("");
-    //const [latitudeSave, setLatitudeSave] = useState<string>("");
-    //const [longitudeSave, setLongitudeSave] = useState<string>("");
     const [results, setResults] = useState<[string, string, string][]>();
     const mapMarkersContext = useMarkers();
+
+    // #---------#
+    // # Cookies #
+    // #---------#
+    const [cookies, setCookie, removeCookie] = useCookies(['latitude', 'longitude']);
 
     // #---------#
     // # Classes #
@@ -81,18 +85,40 @@ export function MeteoPage() {
     // #-------------#
     function search(): void{
         if(latitude && longitude){
-            setResults(classes.map((website: MeteoWebSite) => {return [website.name, website.desc, website.constructUrl(latitude, longitude, '')] }));
+            setResults(classes.map((website: MeteoWebSite) => {return [website.name, website.desc, website.constructUrl(latitude, longitude)] }));
 
             // Map markers
-            if(mapMarkersContext.markers.length <= 0){
+            if(mapMarkersContext.markers){
                 const lat = parseFloat(latitude);
                 const lng = parseFloat(longitude);
                 mapMarkersContext.cleanMarkers();
                 mapMarkersContext.addMarker(lat, lng);
             }
+
+            setCookie('latitude', latitude);
+            setCookie('longitude', longitude);
+        }
+        else{
+            removeCookie('latitude');
+            removeCookie('longitude');
         }
     }
 
+    // #-----------#
+    // # useEffect #
+    // #-----------#
+    useEffect(() => {
+        if(cookies.latitude){
+            setLatitude(cookies.latitude);
+        }
+        if(cookies.longitude){
+            setLongitude(cookies.longitude);
+        }
+        if(cookies.latitude && cookies.longitude){
+            mapMarkersContext.cleanMarkers();
+            mapMarkersContext.addMarker(parseFloat(cookies.latitude), parseFloat(cookies.longitude));
+        }
+    }, []);
 
     return (
             <div className={"flex flex-col w-full h-full"}>
@@ -102,7 +128,7 @@ export function MeteoPage() {
                     <div className="w-1/4 h-full">
                         <input onChange={e => setLatitude(e.target.value)}
                                value={latitude}
-                               className="shadow appearance-none border rounded w-full h-full px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                               className="dark:bg-gray-500 shadow appearance-none border rounded w-full h-full px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                id="latitude" type="text" placeholder="Latitude"/>
                     </div>
 
@@ -110,7 +136,7 @@ export function MeteoPage() {
                     <div className="w-1/4 h-full">
                         <input onChange={e => setLongitude(e.target.value)}
                                value={longitude}
-                               className="shadow appearance-none border rounded w-full h-full px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                               className="dark:bg-gray-500 shadow appearance-none border rounded w-full h-full px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                id="longitude" type="text" placeholder="Longitude"/>
                     </div>
 
@@ -134,7 +160,7 @@ export function MeteoPage() {
 
                 <div className={"flex justify-center items-center w-full p-5"}>
                     {isMapOpen &&
-                        <div id="map" className={"bg-slate-200 p-2 rounded"}>
+                        <div id="map" className={"bg-slate-200 dark:bg-slate-800 p-2 rounded"}>
                             <MapComponent setLatitude={setLatitude} setLongitude={setLongitude} />
                         </div>
                     }
