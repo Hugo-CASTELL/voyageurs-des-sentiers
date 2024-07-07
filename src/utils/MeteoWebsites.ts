@@ -3,7 +3,7 @@ export interface MeteoWebSite {
     desc: string;
     url: string;
 
-    constructUrl(latitude: string, longitude: string, date: string): string;
+    constructUrl(latitude: string, longitude: string ): string;
 }
 
 class MeteoBlue implements MeteoWebSite {
@@ -12,7 +12,7 @@ class MeteoBlue implements MeteoWebSite {
     url: string = "https://www.meteoblue.com/fr/meteo/cartes/";
     zoom: number = 12;
 
-    constructUrl(latitude: string, longitude: string, date: string): string {
+    constructUrl(latitude: string, longitude: string ): string {
         return this.url + "#coords=" + this.zoom + "/" + latitude + "/" + longitude;
     }
 }
@@ -23,7 +23,7 @@ class Windy implements MeteoWebSite {
     url: string = "https://www.windy.com/";
     zoom: number = 12;
 
-    constructUrl(latitude: string, longitude: string, date: string): string {
+    constructUrl(latitude: string, longitude: string ): string {
         return this.url + "?" + latitude + "," + longitude + "," + this.zoom;
     }
 }
@@ -34,7 +34,7 @@ class ECMWF implements MeteoWebSite {
     url: string = "https://charts.ecmwf.int/products/opencharts_meteogram?";
     epsgram: string = "epsgram=classical_15d";
 
-    constructUrl(latitude: string, longitude: string, date: string): string {
+    constructUrl(latitude: string, longitude: string ): string {
         return this.url + this.epsgram + "&lat=" + latitude + "&lon=" + longitude;
     }
 }
@@ -44,7 +44,7 @@ class Meteociel implements MeteoWebSite {
     desc: string = "Prédictions en france";
     url: string = "https://www.meteociel.fr/modeles/arpege.php";
 
-    constructUrl(latitude: string, longitude: string, date: string): string {
+    constructUrl(): string {
         return this.url;
     }
 }

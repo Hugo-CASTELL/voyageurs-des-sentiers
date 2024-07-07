@@ -85,7 +85,7 @@ export function MeteoPage() {
     // #-------------#
     function search(): void{
         if(latitude && longitude){
-            setResults(classes.map((website: MeteoWebSite) => {return [website.name, website.desc, website.constructUrl(latitude, longitude, '')] }));
+            setResults(classes.map((website: MeteoWebSite) => {return [website.name, website.desc, website.constructUrl(latitude, longitude)] }));
 
             // Map markers
             if(mapMarkersContext.markers){
