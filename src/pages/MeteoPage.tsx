@@ -101,6 +101,8 @@ export function MeteoPage() {
         else{
             removeCookie('latitude');
             removeCookie('longitude');
+
+            setResults([]);
         }
     }
 
@@ -172,7 +174,7 @@ export function MeteoPage() {
                         return <a href={result[2]}
                                   key={result[0]}
                                   target="_blank"
-                                  className={"flex flex-col w-48 bg-gray-50/30 dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-black shadow-sm hover:shadow-xl dark:shadow-slate-700 dark:hover:shadow-lg dark:hover:shadow-slate-600 transition duration-300 ease-in-out transform -translate-x-1/5"}
+                                  className={"flex flex-col w-48 bg-gray-50/30 dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-sm hover:shadow-xl dark:shadow-slate-700 dark:hover:shadow-lg dark:hover:shadow-slate-600 transition duration-300 ease-in-out transform -translate-x-1/5"}
                         >
                             <div className={"inline-flex items-center justify-center"}>
                                 <img src={`/logos/${result[0].toLowerCase()}.png`}

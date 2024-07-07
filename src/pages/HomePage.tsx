@@ -1,4 +1,5 @@
 import {Urls} from "../App.tsx";
+import {Link} from "react-router-dom";
 
 export function HomePage(){
     return (
@@ -8,8 +9,8 @@ export function HomePage(){
                     Voyageurs des sentiers
                 </h1>
                 <div className={"flex justify-around"}>
-                    <a href={Urls.Meteo}
-                       className={"flex flex-col w-48 bg-gray-50/30 dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-black shadow-sm hover:shadow-xl dark:shadow-slate-700 dark:hover:shadow-lg dark:hover:shadow-slate-600 transition duration-300 ease-in-out transform -translate-x-1/5"}
+                    <Link to={Urls.Meteo}
+                          className={"flex flex-col w-48 bg-gray-50/30 dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-sm hover:shadow-xl dark:shadow-slate-700 dark:hover:shadow-lg dark:hover:shadow-slate-600 transition duration-300 ease-in-out transform -translate-x-1/5"}
                     >
                     <div className={"inline-flex items-center justify-center"}>
                         <img src={"/assets/pepeprayformeteo.webp"}
@@ -18,7 +19,7 @@ export function HomePage(){
                         />
                     </div>
                     <p className={"text-slate-900 dark:text-white mt-5 text-base font-medium tracking-tight"}>Outil météo</p>
-                </a>
+                </Link>
                 </div>
             </div>
         </div>
