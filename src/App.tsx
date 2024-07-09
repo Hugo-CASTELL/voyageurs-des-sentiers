@@ -17,7 +17,7 @@ function App() {
           <HashRouter>
           <Routes>
               <Route path={Urls.Home} element={<HomePage/>} />
-              <Route path={Urls.Meteo} element={
+              <Route path={Urls.Meteo + "/:lat?/:lng?"} element={
                   <MarkerProvider>
                       <MeteoPage/>
                   </MarkerProvider>

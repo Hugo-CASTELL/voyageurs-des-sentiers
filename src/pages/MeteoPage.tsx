@@ -1,9 +1,10 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getMeteoWebsites, MeteoWebSite} from "../utils/MeteoWebsites.ts";
 import {MapContainer, Marker, TileLayer, useMapEvents} from "react-leaflet";
 import {LatLng} from "leaflet";
 import {useMarkers} from "../contexts/MarkerContext.tsx";
 import {useCookies} from "react-cookie";
+import {useParams} from "react-router-dom";
 
 // #------------------#
 // # Map interactions #
@@ -109,16 +110,39 @@ export function MeteoPage() {
     // #-----------#
     // # useEffect #
     // #-----------#
+    const {lat, lng} = useParams();
     useEffect(() => {
-        if(cookies.latitude){
-            setLatitude(cookies.latitude);
+        // #-----#
+        // # URL #
+        // #-----#
+        if(lat || lng){
+            console.log(lat)
+            console.log(lng)
+            if(lat){
+                setLatitude(lat);
+            }
+            if(lng){
+                setLongitude(lng);
+            }
+            if(lat && lng){
+                mapMarkersContext.cleanMarkers();
+                mapMarkersContext.addMarker(parseFloat(lat), parseFloat(lng));
+            }
         }
-        if(cookies.longitude){
-            setLongitude(cookies.longitude);
-        }
-        if(cookies.latitude && cookies.longitude){
-            mapMarkersContext.cleanMarkers();
-            mapMarkersContext.addMarker(parseFloat(cookies.latitude), parseFloat(cookies.longitude));
+        // #---------#
+        // # Cookies #
+        // #---------#
+        else{
+            if(cookies.latitude){
+                setLatitude(cookies.latitude);
+            }
+            if(cookies.longitude){
+                setLongitude(cookies.longitude);
+            }
+            if(cookies.latitude && cookies.longitude){
+                mapMarkersContext.cleanMarkers();
+                mapMarkersContext.addMarker(parseFloat(cookies.latitude), parseFloat(cookies.longitude));
+            }
         }
     }, []);
 
